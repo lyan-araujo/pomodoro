@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pomodoro | Lyan Araujo</title>
+    <link rel="stylesheet" href="css/style.css">
+    <script type="module" src="js/script.js" async></script>
+</head>
+<body>
+    <header id="header" class="--tamanho-padrao">
+        <h1 class="--ellipsis">Pomodoro</h1>
+        <button id="abre-menu-button" class="--pointer --scale-1">menu</button>
+    </header>
+
+    <nav id="nav-modo" class="--tamanho-padrao">
+        <label for="modo-pomodoro-radio" class="nav-modo__modo-lbl --pointer">
+            <span class="--ellipsis">Pomodoro</span>
+            <b class="--ellipsis">25min</b>
+            <input type="radio" id="modo-pomodoro-radio" class="--display-none" name="timer-modo-radio" value="_pomodoro" checked>
+        </label>
+        
+        <label for="modo-pausa-radio" class="nav-modo__modo-lbl --pointer">
+            <span class="--ellipsis">Pausa</span>
+            <b class="--ellipsis">5min</b>
+            <input type="radio" id="modo-pausa-radio" class="--display-none" name="timer-modo-radio" value="_pausa">
+        </label>
+        
+        <label for="modo-pausa-longa-radio" class="nav-modo__modo-lbl --pointer">
+            <span class="--ellipsis">Pausa Longa</span>
+            <b class="--ellipsis">15min</b>
+            <input type="radio" id="modo-pausa-longa-radio" class="--display-none" name="timer-modo-radio" value="_pausa_longa">
+        </label>
+    </nav>
+
+    <main id="main" class="--tamanho-padrao">
+        <div id="timer-container" class="--pointer">
+            <span id="timer-display">24:59</span>
+            <span id="timer-loadbar"></span>
+        </div>
+        
+        <ul id="display-round-container">
+            <li>p</li>
+            <li>c</li>
+            <li>l</li>
+        </ul>
+
+        <button id="reiniciar-timer-button" class=" --pointer --disabled">Reiniciar</button>
+    </main>
+</body>
+</html>
