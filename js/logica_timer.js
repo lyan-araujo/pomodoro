@@ -1,39 +1,44 @@
 import { timer_values } from './values.js'; 
-import { showTime, loadBar } from './display.js';
 
 let interval = null;
-let tempo_limite;
-let tempo_base_loadbar;
 
 function playOrPause() {
     if(interval){
         pauseTimer();
-        timer_values.timer_status   = 2;
+
     }   else {
         playTimer();
-        timer_values.timer_status   = 1;
+
     }
 }
 
 function playTimer() {
-    let modo    = timer_values.modo_atual;
-    let min_base    = timer_values[ modo ];
-    let tempo_delay = timer_values[ '_tempo_delay' ];
+    let delay = timer_values.delayPausa;
+    let tempo_base_modo  = timer_values.tempoBaseModo;
+    console.log(tempo_base_modo);
+    let tempo_limite;
+    let tempo_base_loadbar  = timer_values.tempoBaseLoadbar;
 
-    if( tempo_delay ) {
-        tempo_limite    = Date.now() + tempo_delay;
+    if( delay ) {
+        tempo_limite    = timer_values.timerTempoLimite   = Date.now() + delay;
 
     } else {
-        tempo_limite    = Date.now() + ( 1e3 * ( 60 * min_base ) + 1 );
-        timer_values[ '_tempo_delay' ]  = null;
-
+        tempo_limite    = timer_values.timerTempoLimite   = Date.now() + ( 1e3 * ( 60 * tempo_base_modo ) + 1 );
     }
 
-    tempo_base_loadbar   = tempo_base_loadbar ? tempo_base_loadbar : ( tempo_limite - Date.now() ) / 1000; 
+    if(!tempo_base_loadbar) {
+        tempo_base_loadbar  = timer_values.tempoBaseLoadbar   = (tempo_limite - Date.now()) / 1000;
+    }
+    
+    timer_values.timerState = 'on';
+    playInterval(tempo_limite, tempo_base_loadbar);
+}
+
+function playInterval(_tempo_limite, _tempo_base_loadbar) {
 
     interval    = setInterval(()=> {
         let tempo_atual = Date.now();
-        let total_sec   = ( tempo_limite - tempo_atual ) / 1e3;
+        let total_sec   = ( _tempo_limite - tempo_atual ) / 1e3;
 
         if( Math.floor(total_sec ) <= 0 ) {
             terminaRound();
@@ -41,46 +46,55 @@ function playTimer() {
         } else {
             let minuto  = Math.floor( total_sec / 60 );
             let segundo = Math.floor( total_sec ) % 60;
-            let load_percent    = 100 - ( total_sec * 100 / tempo_base_loadbar );
-    
-            showTime( minuto, segundo );
-            loadBar( load_percent );
+            let load_percent    = total_sec * 100 / _tempo_base_loadbar;
+
+            timer_values.tempoAtual = [minuto, segundo];
+            timer_values.tempoLoadbarPercent    = load_percent;
         }
     },500);
 }
 
-function pauseTimer() {
+function pauseTimer(action = null) {
     clearInterval( interval );
     interval = null;
-    timer_values[ '_tempo_delay' ] = tempo_limite - Date.now();
+
+    timer_values.timerState = action == 'reset' ? 'off' : 'pause';
+    timer_values.delayPausa = action == 'reset' ? null : timer_values.timerTempoLimite - Date.now();
 }
 
 function resetaTimer() {
-    clearInterval( interval );
-    interval    = null;    
-    timer_values.timer_status   = 0;
-    timer_values[ '_tempo_delay' ]  = null;
-    tempo_base_loadbar  = null;
-    loadBar(0);
+    timer_values.timerState = 'off';
+    timer_values.tempoBaseLoadbar  = null;
+    timer_values.tempoLoadbarPercent    = 100;
+    timer_values.tempoAtual = [timer_values.tempoBaseModo, 0];
+    pauseTimer('reset');
 }
 
 function terminaRound() {
-    atualizaROundAtual();
+    atualizaRoundAtual();
     resetaTimer();
+    executaAutomatico();
 }
 
-function atualizaROundAtual() {
-    let modo    = timer_values.modo_atual;
-    let round_pausa_longa   = timer_values[ '_round_pausa_longa' ];
+function atualizaRoundAtual() {
+    let modo    = timer_values.modoTimer;
+    let round_pausa_longa   = timer_values.roundPausaLonga;
+    let round_atual = timer_values.roundAtual;
 
     if(modo == '_pomodoro') {
-        let round_atual = timer_values.round_atual += 1;
-        timer_values.modo_atual = round_atual % round_pausa_longa == 0 ? '_pausa_longa' : '_pausa';
+        round_atual = timer_values.roundAtual   = round_atual + 1;
+        timer_values.modoTimer  = round_atual % round_pausa_longa == 0 ? '_pausa_longa' : '_pausa';
+        
     } else {
-        timer_values.modo_atual = '_pomodoro';
-    }
+        timer_values.modoTimer  = '_pomodoro';
 
-    console.log(timer_values.round_atual);
+    }
+}
+
+function executaAutomatico() {
+    if(timer_values.modoAtualAuto){
+        playTimer();
+    }
 }
 
 export { playOrPause, resetaTimer };

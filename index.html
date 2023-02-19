@@ -6,47 +6,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pomodoro | Lyan Araujo</title>
     <link rel="stylesheet" href="css/style.css">
-    <script type="module" src="js/script.js" async></script>
+    <script src="https://kit.fontawesome.com/31fdff860f.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header id="header" class="--tamanho-padrao">
-        <h1 class="--ellipsis">Pomodoro</h1>
-        <button id="abre-menu-button" class="--pointer --scale-1">menu</button>
+    <header id="header" class="pad-p">
+        <h1 class="ellipsis">Pomodoro</h1>
+        <label for="menu-status-open" id="abre-menu-label" class="--pointer --scale-1">menu</label>
     </header>
 
-    <nav id="nav-modo" class="--tamanho-padrao">
-        <label for="modo-pomodoro-radio" class="nav-modo__modo-lbl --pointer">
-            <span class="--ellipsis">Pomodoro</span>
-            <b class="--ellipsis">25min</b>
-            <input type="radio" id="modo-pomodoro-radio" class="--display-none" name="timer-modo-radio" value="_pomodoro" checked>
-        </label>
-        
-        <label for="modo-pausa-radio" class="nav-modo__modo-lbl --pointer">
-            <span class="--ellipsis">Pausa</span>
-            <b class="--ellipsis">5min</b>
-            <input type="radio" id="modo-pausa-radio" class="--display-none" name="timer-modo-radio" value="_pausa">
-        </label>
-        
-        <label for="modo-pausa-longa-radio" class="nav-modo__modo-lbl --pointer">
-            <span class="--ellipsis">Pausa Longa</span>
-            <b class="--ellipsis">15min</b>
-            <input type="radio" id="modo-pausa-longa-radio" class="--display-none" name="timer-modo-radio" value="_pausa_longa">
-        </label>
-    </nav>
-
-    <main id="main" class="--tamanho-padrao">
-        <div id="timer-container" class="--pointer">
+    <main id="main" class="wid-p pad-p">
+        <div id="timer-container" class="--pointer" data-loadvalue='100%'>
             <span id="timer-display">24:59</span>
-            <span id="timer-loadbar"></span>
+            <b id="play-button-icon" class="fa-solid fa-play fnt-medium"></b>
+            <span id="pomodoro-counter-container" class="fnt-medium">
+                <b>pomodoros:</b>
+                <b id="pomodoro-counter-display">0</b>
+            </span>
+            <i id="pause-button-icon" class="fa-solid fa-pause --disabled"></i>
+        </div>
+
+        <div id="modo-container" class="wid-p pad-p">
+            <label for="modo-pomodoro-radio" class="modo-container__card --pointer">
+                <b class="fa-solid fa-clock modo-container__icon"></b>
+                <b class="modo-container__text">pomodoro</b>
+                <input type="radio" id="modo-pomodoro-radio" class="dspl-none" name="timer-modo-radio" value="_pomodoro" checked>
+            </label>
+
+            <label for="modo-pausa-radio" class="modo-container__card --pointer">
+                <b class="fa-solid fa-mug-hot modo-container__icon"></b>
+                <b class="modo-container__text">pausa</b>
+                <input type="radio" id="modo-pausa-radio" class="dspl-none" name="timer-modo-radio" value="_pausa">
+            </label>
+
+            <label for="modo-pausa-longa-radio" class="modo-container__card --pointer">
+                <i class="fa-solid fa-moon modo-container__icon"></i>
+                <b class="modo-container__text">pausa longa</b>
+                <input type="radio" id="modo-pausa-longa-radio" class="dspl-none" name="timer-modo-radio" value="_pausa_longa">
+            </label>
         </div>
         
-        <ul id="display-round-container">
-            <li>p</li>
-            <li>c</li>
-            <li>l</li>
-        </ul>
-
-        <button id="reiniciar-timer-button" class=" --pointer --disabled">Reiniciar</button>
+        <button id="reiniciar-timer-button" class="dspl-none --pointer">Reiniciar</button>
     </main>
+
+    <section id="menu">
+        <label for="menu-status-open" id="menu__close-label" class="--pointer"></label>
+
+        <div id="menu-header" class="pad-p">
+            <label for="menu-status-open" class="--pointer">close</label>
+        </div>
+
+        <div id="menu-container" class="pad-p">
+            <div class="menu-container__card">
+                <h2 class="pad-p">Tempo</h2>
+                <div class="menu-container__item  pad-p">
+                    <label for=""><b>Pomodoro</b></label>
+                    <u id="pomodoro-time-display">25min</u>
+                    <input type="range" min="1" max="90" value="25" id="pomodoro-time-range">
+
+                    <label for=""><b>Pausa</b></label>
+                    <u id="pausa-time-display">05min</u>
+                    <input type="range" min="1" max="90" value="25" id="pausa-time-range">
+                    
+                    <label for=""><b>Pausa Longa</b></label>
+                    <u id="pausa-longa-time-display">15min</u>
+                    <input type="range" min="1" max="90" value="25" id="pausa-longa-time-range">
+                </div>
+            </div>
+
+            <div class="menu-container__card">
+                <div class="menu-container__item pad-p">
+                    <label for="">Rounds até <b>Pausa Longa</b></label>
+                    <u id="round-pausa-longa-display">4</u>
+                    <input type="range" min="4" max="60" value="4" id="round-pausa-longa-range">
+                </div>
+            </div>
+
+            <div class="menu-container__card">
+                <h2 class="pad-p">Automático</h2>
+                <div class="menu-container__item pad-p">
+                    <label for="pomodoro-auto-checkbox" class="grid-cspan-2 --pointer"><b>Pomodoro auto.</b></label>
+                    <label for="pomodoro-auto-checkbox" class="checkbox-switcher --pointer">
+                        <input type="checkbox" id="pomodoro-auto-checkbox" hidden>
+                    </label>
+                    
+                    <label for="pausa-auto-checkbox" class="grid-cspan-2 --pointer"><b>Pausa auto.</b></label>
+                    <label for="pausa-auto-checkbox" class="checkbox-switcher --pointer">
+                        <input type="checkbox" id="pausa-auto-checkbox" hidden>
+                    </label>
+                    
+                    <label for="pausa-longa-auto-checkbox" class="grid-cspan-2 --pointer"><b>Pausa Longa auto.</b></label>
+                    <label for="pausa-longa-auto-checkbox" class="checkbox-switcher --pointer">
+                        <input type="checkbox" id="pausa-longa-auto-checkbox" hidden>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </section>    
+    <input type="checkbox" id="menu-status-open" hidden>
+
+    <script type="module" src="js/input.js" async></script>
 </body>
 </html>
