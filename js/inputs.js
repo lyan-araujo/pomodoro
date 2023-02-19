@@ -43,4 +43,4 @@ function checkModoRadio(value_select) {
     });
 }
 
-export {checkModoRadio};
+export {checkModoRadio}; 

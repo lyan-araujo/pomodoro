@@ -1,5 +1,5 @@
 import * as Display from "./display.js";
-import * as Input from './input.js';
+import * as Input from './inputs.js';
 
 let timer_values = {
     _pomodoro   : {

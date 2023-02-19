@@ -19,6 +19,7 @@ function loadbar(percent_value) {
     document.documentElement.style.setProperty( '--transp-percent', `${percent_value + 2}%` );
 }
 
+
 function elementoState(timer_state) {
     switch(timer_state){
         case 'off':
